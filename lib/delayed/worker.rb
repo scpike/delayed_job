@@ -199,7 +199,6 @@ module Delayed
     end
 
     def run_in_child(job)
-      job_say job, "Should fork"
       p1 = fork { run(job) }
       Process.waitpid(p1)
     end
