@@ -198,6 +198,12 @@ module Delayed
       [success, failure]
     end
 
+    def run_in_child(job)
+      job_say job, "Should fork"
+      p1 = fork { run(job) }
+      Process.waitpid(p1)
+    end
+
     def run(job)
       job_say job, 'RUNNING'
       runtime =  Benchmark.realtime do
@@ -277,7 +283,7 @@ module Delayed
     # If no jobs are left we return nil
     def reserve_and_run_one_job
       job = reserve_job
-      self.class.lifecycle.run_callbacks(:perform, self, job) { run(job) } if job
+      self.class.lifecycle.run_callbacks(:perform, self, job) { run_in_child(job) } if job
     end
 
     def reserve_job
