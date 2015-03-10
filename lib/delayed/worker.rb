@@ -199,8 +199,12 @@ module Delayed
     end
 
     def run_in_child(job)
+      ActiveRecord::Base.connection.disconnect!
       p1 = fork { run(job) }
       Process.waitpid(p1)
+      ActiveRecord::Base.establish_connection(
+        Rails.application.config.database_configuration[Rails.env]
+      )
     end
 
     def run(job)
