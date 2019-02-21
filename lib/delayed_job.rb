@@ -14,9 +14,10 @@ require 'delayed/lifecycle'
 require 'delayed/plugin'
 require 'delayed/plugins/clear_locks'
 require 'delayed/backend/base'
+require 'delayed/backend/job_preparer'
 require 'delayed/worker'
 require 'delayed/deserialization_error'
 require 'delayed/railtie' if defined?(Rails::Railtie)
 
 Object.send(:include, Delayed::MessageSending)
-Module.send(:include, Delayed::MessageSending::ClassMethods)
+Module.send(:include, Delayed::MessageSendingClassMethods)
